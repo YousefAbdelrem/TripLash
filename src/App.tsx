@@ -1,16 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
-import NavBar from './components/NavBar'
+import { useEffect, useState } from "react";
+import "./App.css";
+import NavBar from "./components/NavBar";
+import Login from "./components/Login";
+import apiService from "./services/apiService";
+import SignIn from "./components/SignIn";
 
+
+const user = {
+      username: "sameh13652@gmail.com",
+      password: "sameh123"
+    }
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
- <div>
-  <NavBar></NavBar>
- </div>
-  )
+    <div>
+      {/* <NavBar></NavBar> */}
+      <Login ></Login>
+      {/* <SignIn></SignIn> */}
+    </div>
+  );
 }
 
-export default App
+export default App;
