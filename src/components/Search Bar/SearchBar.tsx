@@ -2,8 +2,7 @@
 import React from "react";
 import { Button, InputGroup, Box, Flex, Center } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
-import SearchInput from "../CalenderSearchInput";
-import CalenderSearchInput from "../CalenderSearchInput";
+import CalenderSearchInput from "./CalenderSearchInput";
 import PlaceSearchInput from "./PlaceSearchInput";
 
 const SearchBar: React.FC = () => {

@@ -1,9 +1,8 @@
 // AdvancedNavbar.tsx
 import React from "react";
 import { Box, Flex, Spacer, Image, Center } from "@chakra-ui/react";
-// import { HamburgerIcon } from "@chakra-ui/icons";
 
-import logo from "../assets/logo.png";
+import logo from "../../assets/logo.png";
 import ColorModeSwitch from "./ColorModeSwitch";
 
 const NavBar: React.FC = () => {
