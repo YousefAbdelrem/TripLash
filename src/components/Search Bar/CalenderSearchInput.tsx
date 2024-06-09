@@ -14,11 +14,16 @@ import "react-calendar/dist/Calendar.css";
 const CalenderSearchInput = ({ placeholder }) => {
   const [date, setDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
+
   const [inputValue, setInputValue] = useState("");
-  const onChange = (newDate: React.SetStateAction<Date>) => {
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString("en-GB"); // Format as "DD/MM/YYYY"
+  };
+  const onChange = (newDate) => {
     setDate(newDate);
     setIsOpen(false);
-    setInputValue(newDate.toString());
+    setInputValue(formatDate(newDate));
   };
   const handleClick = () => {
     setIsOpen(!isOpen);
