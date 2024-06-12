@@ -19,6 +19,7 @@ import {
   TbHelpCircle,
   TbDownload,
 } from "react-icons/tb";
+import { Link } from "react-router-dom";
 
 const ProfileMenu: React.FC = () => {
   return (
@@ -30,11 +31,13 @@ const ProfileMenu: React.FC = () => {
         variant="ghost"
       />
       <MenuList>
-        <MenuItem icon={<TbLogin size="18px" />}>
-          <HStack>
-            <Text>Sign In / Login</Text>
-          </HStack>
-        </MenuItem>
+        <Link to="/Login">
+          <MenuItem icon={<TbLogin size="18px" />}>
+            <HStack>
+              <Text>Sign Up / Login</Text>
+            </HStack>
+          </MenuItem>
+        </Link>
         <MenuDivider />
         <MenuItem icon={<TbCurrencyDollar size="18px" />}>
           <HStack>

@@ -19,6 +19,9 @@ import { Server_Url } from "../Main/root";
 import ToursFilters from "../Filter/toursFilters";
 import TopRatedTours from "./TopRatedTours";
 import RecommendedTours from "./RecommendedTours";
+import useFavorite from "../Favourite/useFavourite";
+import FavoriteModal from "../Favourite/FavouriteModal";
+import FavouriteLists from "../Nav Bar/FavouriteLists";
 interface Tour {
   id: string;
   title: string;
@@ -33,7 +36,16 @@ interface Tour {
 }
 
 const TourCards = () => {
-  const [tours, setTours] = useState<Tour[]>([]);
+  // const [tours, setTours] = useState<Tour[]>([]);
+  const {
+    tours,
+    setTours,
+    handleFavorite,
+    isModalOpen,
+    closeModal,
+    selectedTour,
+    toggleFavorite,
+  } = useFavorite([]);
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -50,7 +62,7 @@ const TourCards = () => {
             country: tour.country,
             price: tour.price,
             ratingsAverage: tour.ratingsAverage,
-            faviorate: false,
+            faviorate: tour.faviorate,
             tourCategory: tour.tourCategory,
           }));
           setTours(toursFormatted);
@@ -64,13 +76,7 @@ const TourCards = () => {
     };
 
     fetchTours();
-  }, []);
-  const handleFavorite = (id: string) => {
-    const updatedTours = tours.map((tour) =>
-      tour.id === id ? { ...tour, faviorate: !tour.faviorate } : tour
-    );
-    setTours(updatedTours);
-  };
+  }, [setTours]);
 
   return (
     <>
@@ -114,7 +120,7 @@ const TourCards = () => {
                       />
                     }
                     borderRadius={32}
-                    onClick={() => handleFavorite(tour.id)}
+                    onClick={() => handleFavorite(tour)}
                     bg={"white"}
                   />
                 </Box>
@@ -157,13 +163,19 @@ const TourCards = () => {
                   ))}
                 </Flex>
                 <Text mt="2" fontSize="sm">
-                  {tour.price} $
+                  {tour.price}
                 </Text>
               </Box>
             </Box>
           </>
         ))}
       </Grid>
+      <FavoriteModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        tour={selectedTour}
+        onToggleFavorite={toggleFavorite}
+      />
     </>
   );
 };

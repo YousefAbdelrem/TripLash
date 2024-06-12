@@ -7,15 +7,13 @@ import {
   Image,
   Center,
   HStack,
-  IconButton,
-  Link,
+  // Link,
 } from "@chakra-ui/react";
 
+import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import ColorModeSwitch from "../Main/ColorModeSwitch";
-import { TbUserCog } from "react-icons/tb";
 import ProfileMenu from "./ProfileMenu";
-
 const NavBar: React.FC = () => {
   return (
     <Flex
@@ -27,22 +25,27 @@ const NavBar: React.FC = () => {
       color="black"
     >
       <Box>
-        <Flex>
-          <Image src={logo} boxSize="45px" />
-          <Center color={"#263F6C"} fontSize={"xl"} fontFamily={"cursive"}>
-            Triplash
-          </Center>
-        </Flex>
+        <Link to="/">
+          <Flex align="center">
+            {" "}
+            <Image src={logo} boxSize="45px" />
+            <Center color="#263F6C" fontSize="xl" fontFamily="cursive">
+              Triplash
+            </Center>
+          </Flex>
+        </Link>
       </Box>
-      <Spacer />
       <HStack spacing={8} alignItems="center">
-        <Link href="/bookings">Bookings</Link>
-        <Link href="/favorites">Favorites</Link>
+        <Link to="/FavouriteLists">Favourites</Link>
+        <Link to="/Bookings">Bookings</Link>
         <ProfileMenu />
       </HStack>
-      {/* <ColorModeSwitch /> */}
     </Flex>
   );
 };
 
 export default NavBar;
+
+{
+  /* <ColorModeSwitch /> */
+}

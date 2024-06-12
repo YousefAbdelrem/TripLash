@@ -15,6 +15,8 @@ import { StarIcon } from "@chakra-ui/icons";
 import { FaChevronLeft, FaChevronRight, FaHeart } from "react-icons/fa";
 import { Server_Url } from "../Main/root";
 import React from "react";
+import useFavorite from "../Favourite/useFavourite";
+import FavoriteModal from "../Favourite/FavouriteModal";
 
 interface Tour {
   id: string;
@@ -30,7 +32,17 @@ interface Tour {
 }
 
 const TopRatedTours = () => {
-  const [tours, setTours] = useState<Tour[]>([]);
+  // const [tours, setTours] = useState<Tour[]>([]);
+  const {
+    tours,
+    setTours,
+    handleFavorite,
+    isModalOpen,
+    closeModal,
+    selectedTour,
+    toggleFavorite,
+  } = useFavorite([]);
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   const scroll = (scrollOffset: number) => {
@@ -54,7 +66,7 @@ const TopRatedTours = () => {
             country: tour.country,
             price: tour.price,
             ratingsAverage: tour.ratingsAverage,
-            faviorate: false,
+            faviorate: tour.faviorate,
             tourCategory: tour.tourCategory,
           }));
           setTours(toursFormatted);
@@ -67,14 +79,7 @@ const TopRatedTours = () => {
     };
 
     fetchTours();
-  }, []);
-
-  const handleFavorite = (id: string) => {
-    const updatedTours = tours.map((tour) =>
-      tour.id === id ? { ...tour, faviorate: !tour.faviorate } : tour
-    );
-    setTours(updatedTours);
-  };
+  }, [setTours]);
 
   return (
     <Box position="relative" width="full" overflow="hidden">
@@ -122,7 +127,7 @@ const TopRatedTours = () => {
                       />
                     }
                     borderRadius={32}
-                    onClick={() => handleFavorite(tour.id)}
+                    onClick={() => handleFavorite(tour)}
                     bg="white"
                   />
                 </Box>
@@ -165,7 +170,7 @@ const TopRatedTours = () => {
                   ))}
                 </Flex>
                 <Text mt="2" fontSize="sm">
-                  {tour.price} $
+                  {tour.price}
                 </Text>
               </Box>
             </Box>
@@ -192,6 +197,12 @@ const TopRatedTours = () => {
           boxShadow="md"
         />
       </Box>
+      <FavoriteModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        tour={selectedTour}
+        onToggleFavorite={toggleFavorite}
+      />
     </Box>
   );
 };
