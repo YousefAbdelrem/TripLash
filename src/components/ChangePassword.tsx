@@ -8,8 +8,6 @@ import {
   FormLabel,
   Heading,
   Input,
-  InputLeftAddon,
-  Spacer,
   InputGroup,
   Divider,
   AbsoluteCenter,
@@ -17,9 +15,6 @@ import {
   Text,
   InputRightElement,
   IconButton,
-  InputLeftElement,
-  Select,
-  Img,
   Link,
 } from "@chakra-ui/react";
 import apiClient from "../services/api-client";
@@ -32,24 +27,18 @@ import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { RiFlag2Line } from "react-icons/ri"; // Import icon for country flag
-import { useNavigate } from "react-router-dom";
 import FormContainer from "./formContainer";
+import { useNavigate } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
-
+import { ArrowBackIcon } from "@chakra-ui/icons";
 const schema = z.object({
-  name: z.string(),
-  email: z.string().email({ message: "Invalid email address" }),
-  mobile: z.string().min(10),
-  password: z
-    .string()
-    .min(6, { message: "Enter Min password 6 characters at least" })
-    .max(50),
+  username: z.string().email({ message: "Invalid email address" }),
+  password: z.string().min(6, { message: "Password is not Valid" }).max(50),
 });
 
 type signUpData = z.infer<typeof schema>;
 
-const SignIn = () => {
-  const navigate = useNavigate();
+const ChangePassword = () => {
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
   const countries = [
@@ -77,6 +66,11 @@ const SignIn = () => {
     paddingRight: "5px",
     zIndex: 1,
   };
+  const textStyle = {
+    color: "grey",
+    fontSize: "14px",
+    fontWeight: "400",
+  };
   const {
     register,
     handleSubmit,
@@ -84,75 +78,43 @@ const SignIn = () => {
     formState: { errors },
   } = useForm<signUpData>({ resolver: zodResolver(schema) });
 
+  const navigate = useNavigate();
+
   return (
     <FormContainer>
       <form
         onSubmit={handleSubmit((data: signUpData) => {
           apiClient
-            .post("signUp/", { ...data, language: "E" })
+            .post("login/", { ...data, language: "E" })
             .then((res) => {
               console.log(res.data.status);
-              navigate("/");
+              navigate("/SignIn");
             })
             .catch((err) => console.log(err.response.data.status));
         })}
       >
-        <Flex direction="column" gap="1rem" maxWidth="1024px">
+        <Flex
+          direction="column"
+          gap="1rem"
+          maxWidth="400px"
+          alignSelf={"center"}
+        >
           <Box mb="1rem">
+            <HStack spacing={20}>
+            </HStack>
+          <ArrowBackIcon boxSize={6} onClick={() => {navigate("/changePassword");}}/>
             <NavBar />
           </Box>
-          <Box textAlign="left">
-            <Heading fontSize="22px" mb="20px">
-              Join to unlock the best of TripLash
+          <Box  textAlign="center">
+            <Heading fontSize="22px"  mb="10px">
+              Set New Password
             </Heading>
+            <Text mb='1.7rem' sx={textStyle}>
+              Your new password must be unique from those previously used.
+            </Text>
           </Box>
           <FormControl mb="24px">
-            <FormLabel sx={labelStyle}> Name </FormLabel>
-            <Input
-              {...register("name")}
-              id="name"
-              type="text"
-              sx={inputBorder}
-            ></Input>
-          </FormControl>
-          <FormControl mb="24px">
-            <FormLabel sx={labelStyle}> Email </FormLabel>
-            <Input
-              {...register("email")}
-              id="Email"
-              type="text"
-              sx={inputBorder}
-            ></Input>
-          </FormControl>
-          <FormControl mb="24px" display="flex">
-            <InputGroup>
-              <Select
-                placeholder="Select Country"
-                height="50px"
-                width="40%"
-                mr="0.4rem"
-              >
-                {countries.map((country) => (
-                  <option key={country.code} value={country.code}>
-                    <Flex alignItems="center">
-                      <Icon size="2rem" as={FiEyeOff} mr="0.5rem" />{" "}
-                      {country.name}
-                    </Flex>
-                  </option>
-                ))}
-              </Select>
-              <Input
-                {...register("mobile")}
-                id="mobile"
-                type="number"
-                sx={inputBorder}
-                placeholder="Phone Number"
-                width="70vw"
-              ></Input>
-            </InputGroup>
-          </FormControl>
-          <FormControl mb="24px">
-            <FormLabel sx={labelStyle}> Password </FormLabel>
+            <FormLabel sx={labelStyle}> New Password </FormLabel>
             <InputGroup size="md">
               <Input
                 {...register("password")}
@@ -170,6 +132,26 @@ const SignIn = () => {
               </InputRightElement>
             </InputGroup>
           </FormControl>
+          <FormControl mb="24px">
+            <FormLabel sx={labelStyle}> Confirm Password </FormLabel>
+            <InputGroup size="md">
+              <Input
+                {...register("password")}
+                id="password"
+                type={show ? "text" : "password"}
+                sx={inputBorder}
+              ></Input>
+              <InputRightElement width="4.5rem" height="100%">
+                <IconButton
+                  icon={show ? <FiEyeOff /> : <FiEye />} // Use conditional rendering to display different icons based on state
+                  aria-label={show ? "Hide" : "Show"} // Set aria-label for accessibility
+                  onClick={handleClick}
+                  variant="ghost" // Use ghost variant for an icon-only button
+                />
+              </InputRightElement>
+            </InputGroup>
+          </FormControl>
+        
           <Button
             height="48px"
             margin="0.5rem"
@@ -177,40 +159,13 @@ const SignIn = () => {
             color="white"
             type="submit"
           >
-            Sign Up
+            Reset Password
           </Button>
-          <Box position="relative" padding="0.5rem">
-            <Divider color="grey" border="1px" />
-            <AbsoluteCenter bg="white" px="4">
-              Or
-            </AbsoluteCenter>
-          </Box>
-          <Box>
-            <HStack justify="center" gap="1rem">
-              <Icon as={FaFacebook} boxSize="30px" color="blue.500" />
-              <Icon as={FaApple} boxSize="30px" color="" />
-              <Icon as={FcGoogle} boxSize="30px" color="blue.500" />
-            </HStack>
-          </Box>
-          <Box>
-            <HStack justify="center" gap="">
-              <Text paddingRight="5px">Already a Member?</Text>
-              <RouterLink
-                to="/Login"
-                style={{
-                  fontWeight: "600",
-                  textAlign: "left",
-                  borderColor: "currentColor",
-                }}
-              >
-                Login
-              </RouterLink>
-            </HStack>
-          </Box>
+      
         </Flex>
       </form>
     </FormContainer>
   );
 };
 
-export default SignIn;
+export default ChangePassword;

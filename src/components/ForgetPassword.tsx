@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import NavBar from "./NavBar";
 import {
   Box,
@@ -8,8 +8,6 @@ import {
   FormLabel,
   Heading,
   Input,
-  InputLeftAddon,
-  Spacer,
   InputGroup,
   Divider,
   AbsoluteCenter,
@@ -17,10 +15,8 @@ import {
   Text,
   InputRightElement,
   IconButton,
-  InputLeftElement,
-  Select,
-  Img,
   Link,
+  Select,
 } from "@chakra-ui/react";
 import apiClient from "../services/api-client";
 import { useForm } from "react-hook-form";
@@ -32,26 +28,19 @@ import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { RiFlag2Line } from "react-icons/ri"; // Import icon for country flag
-import { useNavigate } from "react-router-dom";
 import FormContainer from "./formContainer";
-import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import OTPVerification from "./OTPVerification";
 
+ 
 const schema = z.object({
-  name: z.string(),
-  email: z.string().email({ message: "Invalid email address" }),
-  mobile: z.string().min(10),
-  password: z
-    .string()
-    .min(6, { message: "Enter Min password 6 characters at least" })
-    .max(50),
+  email: z.string().email({ message: "Invalid email address" }).optional(),
 });
-
 type signUpData = z.infer<typeof schema>;
 
-const SignIn = () => {
+const ForgetPassowrd = () => {
   const navigate = useNavigate();
-  const [show, setShow] = React.useState(false);
-  const handleClick = () => setShow(!show);
+
   const countries = [
     { name: "United States", code: "US", flag: FiEye },
     { name: "United Kingdom", code: "GB", flag: RiFlag2Line },
@@ -84,52 +73,56 @@ const SignIn = () => {
     formState: { errors },
   } = useForm<signUpData>({ resolver: zodResolver(schema) });
 
+  const [email, setEmail] = useState("empty");
   return (
     <FormContainer>
       <form
         onSubmit={handleSubmit((data: signUpData) => {
           apiClient
-            .post("signUp/", { ...data, language: "E" })
+            .post("send-verification-code/", data)
             .then((res) => {
               console.log(res.data.status);
-              navigate("/");
+              setEmail(data.email);
+              navigate("/OTPVerification", { state: { email: data.email } });
             })
             .catch((err) => console.log(err.response.data.status));
         })}
       >
-        <Flex direction="column" gap="1rem" maxWidth="1024px">
+        <Flex
+          direction="column"
+          gap="1.5rem"
+          
+        >
           <Box mb="1rem">
             <NavBar />
           </Box>
-          <Box textAlign="left">
-            <Heading fontSize="22px" mb="20px">
-              Join to unlock the best of TripLash
+          <Box textAlign="center" marginBottom="40px">
+            <Heading fontSize="30px" mb="20px">
+              Forgot Password?
             </Heading>
+            <Text> Recover from Phone or Email</Text>
           </Box>
-          <FormControl mb="24px">
-            <FormLabel sx={labelStyle}> Name </FormLabel>
-            <Input
-              {...register("name")}
-              id="name"
-              type="text"
-              sx={inputBorder}
-            ></Input>
-          </FormControl>
-          <FormControl mb="24px">
-            <FormLabel sx={labelStyle}> Email </FormLabel>
+          <FormControl>
+            <FormLabel sx={labelStyle}> Email or Phone Number </FormLabel>
             <Input
               {...register("email")}
-              id="Email"
+              id="email"
               type="text"
               sx={inputBorder}
             ></Input>
           </FormControl>
+          {/* <Box position="relative" padding="0.5rem">
+            <Divider color="grey" border="1px" />
+            <AbsoluteCenter bg="white" px="4" fontWeight={"600"}>
+              OR
+            </AbsoluteCenter>
+          </Box>
           <FormControl mb="24px" display="flex">
             <InputGroup>
               <Select
                 placeholder="Select Country"
                 height="50px"
-                width="40%"
+                width="30%"
                 mr="0.4rem"
               >
                 {countries.map((country) => (
@@ -150,26 +143,7 @@ const SignIn = () => {
                 width="70vw"
               ></Input>
             </InputGroup>
-          </FormControl>
-          <FormControl mb="24px">
-            <FormLabel sx={labelStyle}> Password </FormLabel>
-            <InputGroup size="md">
-              <Input
-                {...register("password")}
-                id="password"
-                type={show ? "text" : "password"}
-                sx={inputBorder}
-              ></Input>
-              <InputRightElement width="4.5rem" height="100%">
-                <IconButton
-                  icon={show ? <FiEyeOff /> : <FiEye />} // Use conditional rendering to display different icons based on state
-                  aria-label={show ? "Hide" : "Show"} // Set aria-label for accessibility
-                  onClick={handleClick}
-                  variant="ghost" // Use ghost variant for an icon-only button
-                />
-              </InputRightElement>
-            </InputGroup>
-          </FormControl>
+          </FormControl> */}
           <Button
             height="48px"
             margin="0.5rem"
@@ -177,34 +151,21 @@ const SignIn = () => {
             color="white"
             type="submit"
           >
-            Sign Up
+            Send Code
           </Button>
-          <Box position="relative" padding="0.5rem">
-            <Divider color="grey" border="1px" />
-            <AbsoluteCenter bg="white" px="4">
-              Or
-            </AbsoluteCenter>
-          </Box>
-          <Box>
-            <HStack justify="center" gap="1rem">
-              <Icon as={FaFacebook} boxSize="30px" color="blue.500" />
-              <Icon as={FaApple} boxSize="30px" color="" />
-              <Icon as={FcGoogle} boxSize="30px" color="blue.500" />
-            </HStack>
-          </Box>
-          <Box>
-            <HStack justify="center" gap="">
-              <Text paddingRight="5px">Already a Member?</Text>
-              <RouterLink
-                to="/Login"
-                style={{
-                  fontWeight: "600",
-                  textAlign: "left",
-                  borderColor: "currentColor",
-                }}
+          <Box flexGrow={"1"}></Box>
+          <Box >
+            <HStack justify="center" gap="" >
+              <Text paddingRight="5px" position={'absolute'} bottom='20px'>Remembered Password?
+              <Link
+                fontWeight="semibold"
+                textAlign="left"
+                borderColor="currentColor"
+                padding="5px"
               >
                 Login
-              </RouterLink>
+              </Link>
+              </Text>
             </HStack>
           </Box>
         </Flex>
@@ -213,4 +174,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ForgetPassowrd;
