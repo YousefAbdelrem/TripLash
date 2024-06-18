@@ -54,7 +54,7 @@ const ForgetPassowrd = () => {
     height: "50px",
     _focus: {
       borderColor: "blue.400", // Change border color on focus
-      zIndex: -1,
+      zIndex: 1,
     },
   };
   const labelStyle = {
@@ -64,7 +64,7 @@ const ForgetPassowrd = () => {
     background: "white",
     paddingLeft: "5px",
     paddingRight: "5px",
-    zIndex: 1,
+    zIndex: 2,
   };
   const {
     register,
@@ -81,8 +81,8 @@ const ForgetPassowrd = () => {
           apiClient
             .post("send-verification-code/", data)
             .then((res) => {
-              console.log(res.data.status);
-              setEmail(data.email);
+              const token = res.data.token; // Assuming the token is returned in res.data.token
+              localStorage.setItem("authToken", token); // Store the token securely              setEmail(data.email);
               navigate("/OTPVerification", { state: { email: data.email } });
             })
             .catch((err) => console.log(err.response.data.status));

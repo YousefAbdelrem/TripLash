@@ -23,6 +23,7 @@ import { useLocation } from "react-router-dom";
 
 
 const OTPVerification = () => {
+  const [Code , setCode] = useState("");
   const location = useLocation();
   const { email } = location.state || {};
 
@@ -66,11 +67,12 @@ const OTPVerification = () => {
       <form
         onSubmit={handleSubmit((data: otp) => {
           let code = data.num1 + data.num2 + data.num3 + data.num4;
+          setCode(code);
           apiClient
             .post("verify-code/", {code: code , email : email})
             .then((res) => { 
               console.log(res.data.status);
-              navigate("/ChangePassword");
+              navigate("/ChangePassword", { state: { email: email , Code: code}});
             })
             .catch((err) => console.log(err.response.data.status));
         })}

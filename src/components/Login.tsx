@@ -49,11 +49,12 @@ const SignIn = () => {
 
   const inputBorder = {
     border: "1px solid",
-    color: "grey",
+    color: "black", // Ensure text color is black
     height: "50px",
+    _placeholder: { color: "gray.400" }, // Placeholder color
     _focus: {
       borderColor: "blue.400", // Change border color on focus
-      zIndex: -1,
+      zIndex: 1,
     },
   };
   const labelStyle = {
@@ -63,7 +64,7 @@ const SignIn = () => {
     background: "white",
     paddingLeft: "5px",
     paddingRight: "5px",
-    zIndex: 1,
+    zIndex: 2,
   };
   const {
     register,
@@ -81,6 +82,8 @@ const SignIn = () => {
           apiClient
             .post("login/", { ...data, language: "E" })
             .then((res) => {
+              const token = res.data.token; // Assuming the token is returned in res.data.token
+              localStorage.setItem("authToken", token); // Store the token securely
               console.log(res.data.status);
               navigate("/SignIn");
             })

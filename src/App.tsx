@@ -10,14 +10,13 @@ const user = {
       username: "sameh13652@gmail.com",
       password: "sameh123"
     }
+    
+
 function App() {
 
   return (
     <div>
-      {/* <NavBar></NavBar> */}
-      <Login ></Login>
-      {/* <SignIn></SignIn> */}
-      {/* <ForgetPassword /> */}
+   
     </div>
   );
 }
