@@ -1,24 +1,49 @@
-import { useEffect, useState } from "react";
-import "./App.css";
-import NavBar from "./components/NavBar";
-import Login from "./components/Login";
-import apiService from "./services/apiService";
-import SignIn from "./components/SignIn";
-import ForgetPassword from "./components/ForgetPassword";
+import { useContext } from "react";
+import { Outlet } from "react-router-dom";
+import NavBar from "./components/Nav Bar/NavBar";
 
-const user = {
-      username: "sameh13652@gmail.com",
-      password: "sameh123"
-    }
-    
+import { AuthContext } from "./components/Authentication/AuthContext";
+import AdminNavBar from "./components/Admin Dashboard/adminNavBar";
 
 function App() {
+  const authContext = useContext(AuthContext);
 
+  if (!authContext) {
+    return null;
+  }
+
+  const { isAdmin } = authContext;
   return (
-    <div>
-   
-    </div>
+    <>
+      {!isAdmin ? <NavBar /> : <AdminNavBar />}
+
+      <Outlet />
+    </>
   );
 }
+
+// const PrivateRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
+//   const authContext = useContext(AuthContext);
+
+//   if (!authContext) {
+//     return null;
+//   }
+
+//   const { token } = authContext;
+
+//   return token ? children : <Navigate to="/Login" />;
+// };
+
+// const PrivateRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
+//   const authContext = useContext(AuthContext);
+
+//   if (!authContext) {
+//     return null;
+//   }
+
+//   const { token } = authContext;
+
+//   return token ? children : <Navigate to="/Login" />;
+// };
 
 export default App;
