@@ -1,20 +1,20 @@
 // AdvancedNavbar.tsx
 import React from "react";
-import {
-  Box,
-  Flex,
-  Spacer,
-  Image,
-  Center,
-  HStack,
-  // Link,
-} from "@chakra-ui/react";
-
-import { Link } from "react-router-dom";
+import { Box, Flex, Image, Center, HStack } from "@chakra-ui/react";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import ColorModeSwitch from "../Main/ColorModeSwitch";
 import ProfileMenu from "./ProfileMenu";
+
 const NavBar: React.FC = () => {
+  const location = useLocation();
+
+  const linkStyles = (path: string) => ({
+    fontWeight: location.pathname === path ? "bold" : "normal",
+    color: location.pathname === path ? "#263F6C" : "black",
+    textDecoration: location.pathname === path ? "underline" : "none",
+  });
+
   return (
     <Flex
       as="nav"
@@ -27,7 +27,6 @@ const NavBar: React.FC = () => {
       <Box>
         <Link to="/">
           <Flex align="center">
-            {" "}
             <Image src={logo} boxSize="45px" />
             <Center color="#263F6C" fontSize="xl" fontFamily="cursive">
               Triplash
@@ -36,8 +35,12 @@ const NavBar: React.FC = () => {
         </Link>
       </Box>
       <HStack spacing={8} alignItems="center">
-        <Link to="/FavouriteLists">Favourites</Link>
-        <Link to="/Bookings">Bookings</Link>
+        <Link to="/FavouriteLists" style={linkStyles("/FavouriteLists")}>
+          Favourites
+        </Link>
+        <Link to="/Bookings" style={linkStyles("/Bookings")}>
+          Bookings
+        </Link>
         <ProfileMenu />
       </HStack>
     </Flex>
@@ -45,7 +48,3 @@ const NavBar: React.FC = () => {
 };
 
 export default NavBar;
-
-{
-  /* <ColorModeSwitch /> */
-}

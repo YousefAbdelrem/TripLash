@@ -8,6 +8,7 @@ const Home = () => {
     <>
       <ChakraProvider>
         <SearchBar />
+        {/* for tour and tour guide navigation */}
         <Navi />
       </ChakraProvider>
     </>

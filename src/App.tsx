@@ -1,24 +1,37 @@
-import React, { useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import "./App.css";
+import { useContext } from "react";
+import { Outlet } from "react-router-dom";
 import NavBar from "./components/Nav Bar/NavBar";
-import Home from "./components/Main/Home";
-import FavouriteLists from "./components/Nav Bar/FavouriteLists";
+
+import { AuthContext } from "./components/Authentication/AuthContext";
+import AdminNavBar from "./components/Admin Dashboard/adminNavBar";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const authContext = useContext(AuthContext);
 
+  if (!authContext) {
+    return null;
+  }
+
+  const { isAdmin } = authContext;
   return (
     <>
-      <BrowserRouter>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/FavouriteLists" element={<FavouriteLists />} />
-        </Routes>
-      </BrowserRouter>
+      {!isAdmin ? <NavBar /> : <AdminNavBar />}
+
+      <Outlet />
     </>
   );
 }
+
+// const PrivateRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
+//   const authContext = useContext(AuthContext);
+
+//   if (!authContext) {
+//     return null;
+//   }
+
+//   const { token } = authContext;
+
+//   return token ? children : <Navigate to="/Login" />;
+// };
 
 export default App;

@@ -19,7 +19,7 @@ import useFavorite from "../Favourite/useFavourite";
 import FavoriteModal from "../Favourite/FavouriteModal";
 
 interface Tour {
-  id: string;
+  _id: string;
   title: string;
   image: string;
   location: string;
@@ -32,7 +32,6 @@ interface Tour {
 }
 
 const TopRatedTours = () => {
-  // const [tours, setTours] = useState<Tour[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const {
     tours,
@@ -58,7 +57,7 @@ const TopRatedTours = () => {
           const tourData = response.data.data;
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const toursFormatted = tourData.map((tour: any) => ({
-            id: tour._id,
+            _id: tour._id,
             title: tour.title,
             image: tour.photos.length > 0 ? tour.photos[0] : "",
             city: tour.city,
@@ -97,7 +96,7 @@ const TopRatedTours = () => {
         <HStack spacing={4} p={4}>
           {tours.map((tour) => (
             <Box
-              key={tour.id}
+              key={tour._id}
               borderWidth="1px"
               borderRadius="lg"
               overflow="hidden"
@@ -105,6 +104,9 @@ const TopRatedTours = () => {
               flexShrink={0}
               bg="white"
               boxShadow="md"
+              cursor="pointer"
+              transition="transform 0.2s"
+              _hover={{ transform: "scale(1.05)" }}
             >
               <Box position="relative">
                 <Image

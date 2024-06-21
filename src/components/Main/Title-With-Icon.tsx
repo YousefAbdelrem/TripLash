@@ -1,3 +1,5 @@
+// tour and tourguide sections in home
+
 import React, { useState } from "react";
 import {
   Box,

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 interface Tour {
-  id: string;
+  _id: string;
   title: string;
   image: string;
   location: string;
@@ -30,7 +30,7 @@ const useFavorite = (initialTours: Tour[]) => {
 
   const toggleFavorite = (tour: Tour) => {
     const updatedTours = tours.map((t) =>
-      t.id === tour.id ? { ...t, faviorate: !t.faviorate } : t
+      t._id === tour._id ? { ...t, faviorate: !t.faviorate } : t
     );
     setTours(updatedTours);
     closeModal();

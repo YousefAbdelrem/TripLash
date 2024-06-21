@@ -11,8 +11,13 @@ import {
   CardBody,
   CardFooter,
   Stack,
+  Box,
+  Spacer,
+  CardHeader,
+  Tag,
 } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
+import ReactCountryFlag from "react-country-flag";
 import React from "react";
 import { Server_Url } from "../Main/root";
 import TourGuideFilters from "../Filter/tourGuideFilter";
@@ -20,6 +25,7 @@ interface Language {
   _id: string;
   name: string;
   experience: string;
+  countryCode: string;
 }
 interface TourGuide {
   _id: string;
@@ -31,6 +37,8 @@ interface TourGuide {
   hourPrice: number;
   guideIn: string[];
 }
+const fallbackImageUrl =
+  "https://static9.depositphotos.com/1000291/1170/i/450/depositphotos_11709956-stock-photo-tourist-travellers-with-map-in.jpg";
 
 const TourGuideCards = () => {
   const [tourGuides, setTourGuides] = useState<TourGuide[]>([]);
@@ -39,16 +47,18 @@ const TourGuideCards = () => {
     const fetchTourGuides = async () => {
       try {
         const response = await axios.get(`${Server_Url}/api/get-all-guides`);
-        const tourGuideData = response.data;
+        const tourGuideData = response.data.data;
+        console.log(response);
         if (Array.isArray(tourGuideData)) {
           const tourGuideDataFormatted = tourGuideData.map(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (tourGuide: any) => ({
               _id: tourGuide._id,
-              firstname: tourGuide.user.firstname || "Unknown",
-              lastname: tourGuide.user.lastname || "",
+              firstname: tourGuide.user
+                ? tourGuide.user.firstname || "Unknown"
+                : "Unknown",
+              lastname: tourGuide.user ? tourGuide.user.lastname || "" : "",
               identity_photo: tourGuide.identity_photo || "",
-              // "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
               location: tourGuide.location || "Unknown",
               price: tourGuide.dayPrice || 0,
               rate: tourGuide.rate || 0,
@@ -80,49 +90,69 @@ const TourGuideCards = () => {
         For You
       </Heading>
       <TourGuideFilters />
-      <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap={6}>
+      <Grid templateColumns="repeat(auto-fill, minmax(300px, 1fr))" gap={6}>
         {tourGuides.map((tourGuide) => (
           <Card
             key={tourGuide._id}
+            width="100%"
             direction={{ base: "column", sm: "row" }}
             overflow="hidden"
             variant="outline"
             cursor="pointer"
+            boxShadow="lg"
+            borderRadius="md"
+            transition="transform 0.2s"
+            _hover={{ transform: "scale(1.05)" }}
           >
-            <Image
-              objectFit="cover"
-              maxW={{ base: "100%", sm: "150px" }}
-              src={tourGuide.identity_photo}
-              alt={tourGuide.firstname}
-            />
+            <Box width={{ base: "100%", sm: "150px" }} overflow="hidden">
+              <Image
+                objectFit="cover"
+                width="100%"
+                height="100%"
+                src={tourGuide.identity_photo}
+                alt={`${tourGuide.firstname} ${tourGuide.lastname}`}
+                fallbackSrc={fallbackImageUrl}
+              />
+            </Box>
 
-            <Stack>
-              <CardBody>
-                <Heading size="sm">
+            <Stack flex="1" p={4}>
+              <CardHeader mb={-8} mt={-4}>
+                <Heading size="md" fontWeight={"12px"}>
                   {tourGuide.firstname} {tourGuide.lastname}
                 </Heading>
+              </CardHeader>
+              <CardBody mt={-4} mb={-8}>
                 <Text py="2">{tourGuide.guideIn.join(", ")}</Text>
-                <ul>
+                <Spacer />
+                {/* <ul>
                   {tourGuide.languages.map((lang) => (
                     <li key={lang._id}>
                       {lang.name} - {lang.experience}
                     </li>
                   ))}
-                </ul>
+                </ul> */}
+                <Flex flexWrap="wrap">
+                  {tourGuide.languages.map((lang) => (
+                    <Tag key={lang._id} mr={2} mb={2}>
+                      <ReactCountryFlag
+                        countryCode={lang.countryCode}
+                        svg
+                        style={{ marginRight: "5px" }}
+                      />
+                      {lang.name} - {lang.experience}
+                    </Tag>
+                  ))}
+                </Flex>
               </CardBody>
 
-              <CardFooter justifyContent={"space-between"}>
-                <Flex>
-                  <Text>{tourGuide.hourPrice}</Text>
+              <CardFooter justifyContent="space-between" alignItems="center">
+                <Flex alignItems="center">
+                  <Text fontWeight="bold">${tourGuide.hourPrice}/hr</Text>
                 </Flex>
-                <Flex mt="2" alignItems="center">
-                  {[...Array(5)].map((_, index) => (
-                    <Icon
-                      key={index}
-                      as={StarIcon}
-                      color={index < tourGuide.rate ? "yellow.400" : "gray.300"}
-                    />
-                  ))}
+                <Spacer />
+                <Flex alignItems="center">
+                  <Icon as={StarIcon} color="yellow.400" />
+                  <Text ml={1}>{tourGuide.rate}</Text>
                 </Flex>
               </CardFooter>
             </Stack>

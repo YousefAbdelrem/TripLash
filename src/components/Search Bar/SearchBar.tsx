@@ -1,4 +1,3 @@
-// SearchBar.tsx
 import React from "react";
 import { Button, InputGroup, Box, Flex, Center } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
@@ -23,7 +22,6 @@ const SearchBar: React.FC = () => {
             <CalenderSearchInput placeholder={"End Date"} />
 
             <Button
-              // onClick={handleSearch}
               bg="#4f90ae"
               color={"white"}
               borderRadius="3xl"

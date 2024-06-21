@@ -23,7 +23,7 @@ import useFavorite from "../Favourite/useFavourite";
 import FavoriteModal from "../Favourite/FavouriteModal";
 import FavouriteLists from "../Nav Bar/FavouriteLists";
 interface Tour {
-  id: string;
+  _id: string;
   title: string;
   image: string;
   location: string;
@@ -36,7 +36,6 @@ interface Tour {
 }
 
 const TourCards = () => {
-  // const [tours, setTours] = useState<Tour[]>([]);
   const {
     tours,
     setTours,
@@ -55,7 +54,7 @@ const TourCards = () => {
           const tourData = response.data.data;
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const toursFormatted = tourData.map((tour: any) => ({
-            id: tour._id,
+            _id: tour._id,
             title: tour.title,
             image: tour.photos.length > 0 ? tour.photos[0] : "",
             city: tour.city,
@@ -96,10 +95,13 @@ const TourCards = () => {
         {tours.map((tour) => (
           <>
             <Box
-              key={tour.id}
+              key={tour._id}
               borderWidth="1px"
               borderRadius="lg"
               overflow="hidden"
+              cursor="pointer"
+              transition="transform 0.2s"
+              _hover={{ transform: "scale(1.05)" }}
             >
               <Box position="relative" display="inline-block">
                 <Image

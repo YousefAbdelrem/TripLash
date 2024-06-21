@@ -1,5 +1,5 @@
 interface Tour {
-  id: string;
+  _id: string;
   title: string;
   image: string;
   location: string;
