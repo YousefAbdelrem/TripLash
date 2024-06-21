@@ -6,6 +6,7 @@ import OTPVerification from "../components/OTPVerification";
 import ChangePassword from "../components/ChangePassword"; 
 
 const router = createBrowserRouter([
+  // { path: "/", element: <Tour /> },
   { path: "/", element: <Login /> },
   { path: "/Login", element: <Login /> },
   { path: "/SignIn", element: <SignIn /> },
