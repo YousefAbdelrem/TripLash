@@ -22,6 +22,7 @@ const AdminNavBar: React.FC = () => {
       wrap="wrap"
       padding="1.5rem 8rem"
       color="black"
+      boxShadow="sm"
     >
       <Box>
         <Link to="/AdminDashboard">

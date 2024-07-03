@@ -21,6 +21,8 @@ import ReactCountryFlag from "react-country-flag";
 import React from "react";
 import { Server_Url } from "../Main/root";
 import TourGuideFilters from "../Filter/tourGuideFilter";
+import { useLocation, useNavigate } from "react-router-dom";
+import TourGuideInfo from "./TourGuideInfo";
 interface Language {
   _id: string;
   name: string;
@@ -41,6 +43,9 @@ const fallbackImageUrl =
   "https://static9.depositphotos.com/1000291/1170/i/450/depositphotos_11709956-stock-photo-tourist-travellers-with-map-in.jpg";
 
 const TourGuideCards = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [tourGuides, setTourGuides] = useState<TourGuide[]>([]);
 
   useEffect(() => {
@@ -62,10 +67,19 @@ const TourGuideCards = () => {
               location: tourGuide.location || "Unknown",
               price: tourGuide.dayPrice || 0,
               rate: tourGuide.rate || 0,
-              hourPrice: tourGuide.hourPrice || 0,
               guideIn: tourGuide.guideIn || [],
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               languages: tourGuide.languages || [],
+              photo: tourGuide.user ? tourGuide.user.photo || "" : "",
+              included: tourGuide.included || [
+                "Guiding service",
+                "private transportation",
+                "Entrance fees",
+              ],
+              dayPrice: tourGuide.dayPrice || 400,
+              hourPrice: tourGuide.hourPrice || 100,
+              aboutYou: tourGuide.aboutYou ||"tour guide",
+
             })
           );
           setTourGuides(tourGuideDataFormatted);
@@ -103,6 +117,13 @@ const TourGuideCards = () => {
             borderRadius="md"
             transition="transform 0.2s"
             _hover={{ transform: "scale(1.05)" }}
+            onClick={() => {
+              // setTourData(tour);
+              // console.log(tour);
+              // <Tour tourData={tour}/>;
+              // console.log(tourGuide);
+              navigate("/TourGuideInfo", { state: { tourGuide } });
+            }}
           >
             <Box width={{ base: "100%", sm: "150px" }} overflow="hidden">
               <Image

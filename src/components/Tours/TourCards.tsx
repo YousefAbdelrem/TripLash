@@ -22,6 +22,8 @@ import RecommendedTours from "./RecommendedTours";
 import useFavorite from "../Favourite/useFavourite";
 import FavoriteModal from "../Favourite/FavouriteModal";
 import FavouriteLists from "../Nav Bar/FavouriteLists";
+import { useLocation, useNavigate } from "react-router-dom";
+import Tour from "./Tour";
 interface Tour {
   _id: string;
   title: string;
@@ -36,6 +38,23 @@ interface Tour {
 }
 
 const TourCards = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [tourData, setTourData] = useState<Tour>({
+    _id: "",
+    title: "",
+    image: "",
+    location: "",
+    price: 0,
+    ratingsAverage: 0,
+    faviorate: false,
+    tourCategory: "",
+    city: "",
+    country: "",
+  });
+
+
   const {
     tours,
     setTours,
@@ -102,6 +121,12 @@ const TourCards = () => {
               cursor="pointer"
               transition="transform 0.2s"
               _hover={{ transform: "scale(1.05)" }}
+              onClick={() => {
+                // setTourData(tour); 
+                // console.log(tour);
+                // <Tour tourData={tour}/>;
+                navigate("/Tour", { state: { tour } });
+              }}
             >
               <Box position="relative" display="inline-block">
                 <Image

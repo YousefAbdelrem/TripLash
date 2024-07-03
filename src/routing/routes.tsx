@@ -16,6 +16,8 @@ import TourGuideApplications from "../components/Admin Dashboard/TourGuideApplic
 import UserList from "../components/Admin Dashboard/UserList";
 import TourGuideList from "../components/Admin Dashboard/TourGuideList";
 import FavouriteList from "../components/Admin Dashboard/FavouriteList";
+import Tour from "../components/Tours/Tour";
+import TourGuideInfo from "../components/TourGuide/TourGuideInfo";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +29,21 @@ const router = createBrowserRouter([
       </AuthProvider>
     ),
     children: [
-      { path: "/", element: <Home /> },
+      {
+        path: "/TourGuideInfo",
+        element: (
+         <TourGuideInfo />
+        ),
+      },
+      {
+        path: "/",
+        element: (
+          <AuthProvider>
+            <Home />
+          </AuthProvider>
+        ),
+      },
+      { path: "/Tour", element: <Tour /> },
       { path: "/Login", element: <Login /> },
       { path: "/SignIn", element: <SignIn /> },
       { path: "/ForgetPassword", element: <ForgetPassword /> },
@@ -41,25 +57,27 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-    ],
-  },
-  {
-    path: "/",
-    element: (
-      <AuthProvider>
-        <AdminProtectedRoute>
-          <AdminDashboard />
-        </AdminProtectedRoute>
-      </AuthProvider>
-    ),
-    children: [
-      { path: "users", element: <UserList /> },
-      { path: "tour-guides", element: <TourGuideList /> },
       {
-        path: "tour-guide-applications",
-        element: <TourGuideApplications />,
+        path: "/AdminDashboard",
+        element: (
+          <AdminDashboard />
+          // <AuthProvider>
+          //   <AdminProtectedRoute>
+          //     <AdminDashboard />
+          //   </AdminProtectedRoute>
+          // </AuthProvider>
+        ),
+        children: [
+          { path: "AdminDashboard", element: <AdminDashboard /> },
+          { path: "users", element: <UserList /> },
+          { path: "tour-guides", element: <TourGuideList /> },
+          {
+            path: "tour-guide-applications",
+            element: <TourGuideApplications />,
+          },
+          { path: "favourites", element: <FavouriteList /> },
+        ],
       },
-      { path: "favourites", element: <FavouriteList /> },
     ],
   },
 ]);

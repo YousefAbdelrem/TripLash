@@ -34,16 +34,4 @@ function App() {
 //   return token ? children : <Navigate to="/Login" />;
 // };
 
-// const PrivateRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
-//   const authContext = useContext(AuthContext);
-
-//   if (!authContext) {
-//     return null;
-//   }
-
-//   const { token } = authContext;
-
-//   return token ? children : <Navigate to="/Login" />;
-// };
-
 export default App;

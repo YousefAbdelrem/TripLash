@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react'
 interface Props{
     children : ReactNode;
 }
-const FormContainer = ({children} : Props) => {
+const tourContainer = ({children} : Props) => {
   return (
     <Flex
       height="100vh"
@@ -26,4 +26,4 @@ const FormContainer = ({children} : Props) => {
   );
 }
 
-export default FormContainer;
+export default tourContainer;
